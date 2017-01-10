@@ -21,24 +21,22 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data: function () {
     return {
       text: '',
       messages: [{
-        author: 'me',
-        text: 'Hello, Bot! Any news on that taxi?',
-        timestamp: new Date().toLocaleString()
-      }, {
         author: 'bot',
-        text: 'Sorry. I do not seem to remember any taxi... Could you repeat the question?',
+        text: 'Let us discuss something!',
         timestamp: new Date().toLocaleString()
       }]
     }
   },
   methods: {
     modifiers (message) {
-      return { 'Message--Mine': message.author === 'me' }
+      return { 'Message--Mine': message.author === 'me', 'Message--Error': message.author === 'error' }
     },
     onSubmit () {
       if (this.text.length === 0) {
@@ -51,6 +49,20 @@ export default {
         timestamp: new Date().toLocaleString()
       })
 
+      axios.post('http://localhost:3000/ask', { question: this.text }).then((resp) => {
+        this.messages.push({
+          author: 'bot',
+          text: resp.data.answer,
+          timestamp: new Date().toLocaleString()
+        })
+      }).catch(err => {
+        this.messages.push({
+          author: 'error',
+          text: err.message,
+          timestamp: new Date().toLocaleString()
+        })
+      })
+
       this.text = ''
     }
   },
@@ -61,7 +73,7 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i');
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,700');
 
 * {
   margin: 0px;
@@ -107,8 +119,12 @@ export default {
   background-color: #7518a0;
 }
 
+.Message--Error .Message__Text {
+  background-color: #b7263c;
+}
+
 .Message__Author {
-  font-weight: 600;
+  font-weight: 700;
   padding: 5px;
   color: #FFFFFF;
 }

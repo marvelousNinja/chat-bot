@@ -21,6 +21,7 @@
     "eslint-plugin-standard": "^2.0.1"
   },
   "dependencies": {
+    "kcors": "^2.2.0",
     "koa": "^2.0.0",
     "koa-bodyparser": "^3.2.0",
     "koa-router": "^7.0.1",
