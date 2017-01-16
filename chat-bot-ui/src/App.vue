@@ -1,32 +1,20 @@
 <template>
   <div id='app'>
     <div class='MessageList'>
-      <div v-for='message in messages' class='Message' :class='modifiers(message)'>
-        <div class='Message__Author'>
-          {{ message.author }}
-        </div>
-        <div class='Message__Text'>
-          {{ message.text }}
-        </div>
-        <div class='Message__Timestamp'>
-          {{ message.timestamp }}
-        </div>
-      </div>
-      <form class='MessageForm' v-on:submit.prevent='onSubmit'>
-        <input v-model='text'  class='MessageForm__Text' placeholder='Type a message...'>
-        <button class='MessageForm__Send'>&#10003;</button>
-      </form>
+      <Message v-for='message in messages' :message='message'/>
+      <MessageForm @messageSent='onMessageSent'/>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import Message from './components/Message'
+import MessageForm from './components/MessageForm'
 
 export default {
-  data: function () {
+  components: { Message, MessageForm },
+  data () {
     return {
-      text: '',
       messages: [{
         author: 'bot',
         text: 'Let us discuss something!',
@@ -35,35 +23,8 @@ export default {
     }
   },
   methods: {
-    modifiers (message) {
-      return { 'Message--Mine': message.author === 'me', 'Message--Error': message.author === 'error' }
-    },
-    onSubmit () {
-      if (this.text.length === 0) {
-        return
-      }
-
-      this.messages.push({
-        author: 'me',
-        text: this.text,
-        timestamp: new Date().toLocaleString()
-      })
-
-      axios.post(process.env.API_URL + '/ask', { question: this.text }).then((resp) => {
-        this.messages.push({
-          author: 'bot',
-          text: resp.data.answer,
-          timestamp: new Date().toLocaleString()
-        })
-      }).catch(err => {
-        this.messages.push({
-          author: 'error',
-          text: err.message,
-          timestamp: new Date().toLocaleString()
-        })
-      })
-
-      this.text = ''
+    onMessageSent (message) {
+      this.messages.push(message)
     }
   },
   updated () {
@@ -96,86 +57,4 @@ export default {
   margin: 0px auto;
   min-height: 100vh;
 }
-
-.Message {
-  display: flex;
-  flex-direction: column;
-  align-self: flex-start;
-}
-
-.Message--Mine {
-  align-self: flex-end;
-}
-
-.Message--Mine .Message__Author {
-  align-self: flex-end;
-}
-
-.Message--Mine .Message__Timestamp {
-  align-self: flex-start;
-}
-
-.Message--Mine .Message__Text {
-  background-color: #7518a0;
-}
-
-.Message--Error .Message__Text {
-  background-color: #b7263c;
-}
-
-.Message__Author {
-  font-weight: 700;
-  padding: 5px;
-  color: #FFFFFF;
-}
-
-.Message__Text {
-  color: #FFFFFF;
-  background-color: #306696;
-  border-radius: 10px;
-  padding: 10px 15px;
-}
-
-.Message__Timestamp {
-  color: grey;
-  font-size: 0.5em;
-  padding: 4px;
-  align-self: flex-end;
-}
-
-.MessageForm {
-  align-self: flex-end;
-  padding: 10px;
-}
-
-.MessageForm__Text {
-  border-radius: 10px;
-  height: 1.5em;
-  border: 1px solid black;
-  padding: 5px 10px;
-  font-size: 1em;
-}
-
-.MessageForm__Text:focus {
-  outline: none;
-}
-
-.MessageForm__Text::-webkit-input-placeholder {
-  font-weight: 100;
-}
-
-.MessageForm__Send {
-  outline: none;
-  border: 0px;
-  color: #FFFFFF;
-  background-color: #7518a0;
-  font-size: 1.5em;
-  border-radius: 10px;
-  padding: 5px 10px;
-}
-
-.MessageForm__Send:active {
-  background-color: #306696;
-}
-
 </style>
