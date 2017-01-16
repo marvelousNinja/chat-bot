@@ -49,7 +49,7 @@ export default {
         timestamp: new Date().toLocaleString()
       })
 
-      axios.post('http://localhost:3000/ask', { question: this.text }).then((resp) => {
+      axios.post(process.env.API_URL + '/ask', { question: this.text }).then((resp) => {
         this.messages.push({
           author: 'bot',
           text: resp.data.answer,
