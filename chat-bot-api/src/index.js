@@ -1,5 +1,3 @@
-import 'babel-polyfill'
-
 import Koa from 'koa'
 import koaCors from 'kcors'
 import koaBodyParser from 'koa-bodyparser'
