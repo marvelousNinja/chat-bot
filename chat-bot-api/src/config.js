@@ -8,7 +8,7 @@ export default function () {
     type: 'object',
     properties: {
       port: { type: 'string' },
-      workspaceId: { type: 'string', format: 'uuid' },
+      workspaceId: { type: 'string' },
       version: { type: 'string' },
       url: { type: 'string', format: 'uri' },
       password: { type: 'string' },

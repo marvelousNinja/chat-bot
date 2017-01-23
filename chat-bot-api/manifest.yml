@@ -3,4 +3,4 @@ applications:
 - name: chat-bot-api
   memory: 128M
   buildpack: https://github.com/cloudfoundry/nodejs-buildpack
-  host: chat-bot-api
+  host: chat-bot-api-<<YOUR-NAME>>
