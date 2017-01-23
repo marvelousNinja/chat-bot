@@ -5,7 +5,7 @@ This exercise covers the following Bluemix topics: buildpacks, routes, configura
 
 ## Prerequisites
 * Git
-* Node.js 5.x or higher with NPM 3.x or higher
+* Node.js 4.x or higher with NPM 3.x or higher
 * Bluemix account
 
 ## First steps
@@ -15,19 +15,17 @@ This exercise covers the following Bluemix topics: buildpacks, routes, configura
 ## Building the UI
 * Using the command line, navigate to the `chat-bot-ui` directory and install dependencies with `npm install`
 * Open the `chat-bot-ui` directory in your favourite code editor
-* In the `./config` folder, create `dev.env.js` and `prod.env.js` using contents from sample files nearby
 * Run the development server with `npm run dev`. That should automatically launch the default web browser
-* Observe the contents of `./src` directory. Make some changes to HTML in `./src/App.vue`. Observe how the page in the browser window updates accoridngly
+* Observe the contents of `./src` directory. Make some changes to HTML in `./src/App.vue`. Observe how the page in the browser window updates accordingly
 * Pause for the discussion on build artifacts. Create a build artifact for deployment with `npm run build`. Observe the contents of `./dist` directory
 * Create a `./manifest.yml` file:
 ```
----
 applications:
 - name: chat-bot-ui
   memory: 64M
   buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
   path: ./dist
-  host: chat-bot-ui
+  host: chat-bot-ui-<<YOUR-NAME>>
 ```
 * Finally, deploy the application using the command line: `cf push`
 * Pause for the discussion on routes. Observe the command line output for a URL of the deployed app. Open it and validate that it's working. Check both HTTP and HTTPS access
@@ -147,9 +145,10 @@ export default {
           timestamp: new Date().toLocaleString()
         })
       }).catch(err => {
+        const message = err.response ? `${err.response.status} ${err.response.data}` : err.message
         this.$emit('messageSent', {
           author: 'error',
-          text: err.message,
+          text: message,
           timestamp: new Date().toLocaleString()
         })
       })
@@ -264,27 +263,25 @@ export default {
 
 ## Building the API
 * Using the command line, navigate to the `chat-bot-api` directory and install dependencies with `npm install`
-* Naviate to Bluemix Catalog and create Conversation service: https://console.ng.bluemix.net/catalog/services/conversation/
-* Open the *Service Credentials* tab and click on *View Credentials*. Copy the contents, we will need them later
-* Open the *Manage* tab and click *Launch tool*. Press on *Import a Workspace* icon and choose `./workspace.json`
-* Navigate back to the list of workspaces and and click on *Details* icon and choose *View Details*. Copy the Workspace ID
 * Open the `chat-bot-api` directory in your favourite code editor
-* Create `.env` file using contents from sample file nearby
-* Replace contents of `BOT_API_URL`, `USERNAME`, `PASSWORD` and `WORKSPACE_ID` variables with values collected on previous steps
+* We need to collect application configuration and put it into `./.env` file.
+* Open the browser. Navigate to Bluemix Catalog and create Conversation service: https://console.ng.bluemix.net/catalog/services/conversation/
+* Open the *Service Credentials* tab and click on *View Credentials*. Copy the contents and fill `BOT_API_URL`, `API_USERNAME`, `API_PASSWORD` variabiles in `./.env` file.
+* Back in the browser, open the *Manage* tab and click *Launch tool*. Press on *Import a Workspace* icon and choose `./workspace.json`
+* Navigate back to the list of workspaces and and click on *Details* icon and choose *View Details*. Copy the Workspace ID into `WORKSPACE_ID` variable in `./.env` file.
 * Run the development server with `npm run dev`
 * Pause for the discussion on configuration. Observe the contents of `./src/config.js`.
 * Pause for the discussion on build artifacts. Create a build artifact for deployment with `npm run build`. Observe the contents of `./dist` directory
 * Create a `./manifest.yml` file:
 ```
----
 applications:
 - name: chat-bot-api
   memory: 128M
   buildpack: https://github.com/cloudfoundry/nodejs-buildpack
-  host: chat-bot-api
+  host: chat-bot-api-<<YOUR-NAME>>
 ```
 * Finally, deploy the application using the command line: `cf push`. Observe the command line output for a URL of the deployed app
-* Pause for the discussion on logs. Tail the logs of the application with `cf logs chat-bot-api`
+* Pause for the discussion on logs. Print the logs of the application with `cf logs --recent chat-bot-api`
 * Open a `chat-bot-ui` in your code editor and modify `./config/prod.env.js` with the URL of the deployed API
 * Rebuild and redeploy the `chat-bot-ui` with `npm run build` and `cf push`
 * Open the URL of deployed `chat-bot-ui` and try to have a conversation with your bot

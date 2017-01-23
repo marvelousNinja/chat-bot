@@ -1,4 +1,3 @@
----
 applications:
 - name: chat-bot-api
   memory: 128M

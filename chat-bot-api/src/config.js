@@ -22,8 +22,8 @@ export default function () {
     workspaceId: process.env.WORKSPACE_ID,
     version: process.env.VERSION,
     url: process.env.BOT_API_URL,
-    password: process.env.PASSWORD,
-    username: process.env.USERNAME
+    password: process.env.API_PASSWORD,
+    username: process.env.API_USERNAME
   }
 
   const validator = new Ajv({ allErrors: true })

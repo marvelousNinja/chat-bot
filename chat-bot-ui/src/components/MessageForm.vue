@@ -33,9 +33,10 @@ export default {
           timestamp: new Date().toLocaleString()
         })
       }).catch(err => {
+        const message = err.response ? `${err.response.status} ${err.response.data}` : err.message
         this.$emit('messageSent', {
           author: 'error',
-          text: err.message,
+          text: message,
           timestamp: new Date().toLocaleString()
         })
       })
