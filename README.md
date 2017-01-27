@@ -16,9 +16,9 @@ This exercise covers the following Bluemix topics: buildpacks, routes, configura
 * Using the command line, navigate to the `chat-bot-ui` directory and install dependencies with `npm install`
 * Open the `chat-bot-ui` directory in your favourite code editor
 * Run the development server with `npm run dev`. That should automatically launch the default web browser
-* Observe the contents of `./src` directory. Make some changes to HTML in `./src/App.vue`. Observe how the page in the browser window updates accordingly
-* Pause for the discussion on build artifacts. Create a build artifact for deployment with `npm run build`. Observe the contents of `./dist` directory
-* Create a `./manifest.yml` file:
+* Observe the contents of `./chat-bot-ui/src` directory. Make some changes to HTML in `./chat-bot-ui/src/App.vue`. Observe how the page in the browser window updates accordingly
+* Pause for the discussion on build artifacts. Create a build artifact for deployment with `npm run build`. Observe the contents of `./chat-bot-api/dist` directory
+* Create a `./chat-bot-ui/manifest.yml` file:
 ```
 applications:
 - name: chat-bot-ui
@@ -29,8 +29,8 @@ applications:
 ```
 * Finally, deploy the application using the command line: `cf push`
 * Pause for the discussion on routes. Observe the command line output for a URL of the deployed app. Open it and validate that it's working. Check both HTTP and HTTPS access
-* Pause for the discussion on buildpacks. Observe the contents of `./manifest.yml` and take a look at documentation at http://docs.cloudfoundry.org/buildpacks/staticfile/index.html
-* Let's create actual chat UI. Create `./src/components/Message.vue` with the following contents:
+* Pause for the discussion on buildpacks. Observe the contents of `./chat-bot-ui/manifest.yml` and take a look at documentation at http://docs.cloudfoundry.org/buildpacks/staticfile/index.html
+* Let's create actual chat UI. Create `./chat-bot-ui/src/components/Message.vue` with the following contents:
 ```
 <template>
   <div class='Message' :class='modifiers'>
@@ -108,7 +108,7 @@ export default {
 }
 </style>
 ```
-* Now, let's create `./src/components/MessageForm.vue`:
+* Now, let's create `./chat-bot-ui/src/components/MessageForm.vue`:
 ```
 <template>
   <form class='MessageForm' v-on:submit.prevent='onSubmit'>
@@ -196,7 +196,7 @@ export default {
 }
 </style>
 ```
-* Finally, replace the contents of `./src/App.vue` to use the components we've just created:
+* Finally, replace the contents of `./chat-bot-ui/src/App.vue` to use the components we've just created:
 ```
 <template>
   <div id='app'>
@@ -264,15 +264,14 @@ export default {
 ## Building the API
 * Using the command line, navigate to the `chat-bot-api` directory and install dependencies with `npm install`
 * Open the `chat-bot-api` directory in your favourite code editor
-* We need to collect application configuration and put it into `./.env` file.
 * Open the browser. Navigate to Bluemix Catalog and create Conversation service: https://console.ng.bluemix.net/catalog/services/conversation/
-* Open the *Service Credentials* tab and click on *View Credentials*. Copy the contents and fill `BOT_API_URL`, `API_USERNAME`, `API_PASSWORD` variabiles in `./.env` file.
-* Back in the browser, open the *Manage* tab and click *Launch tool*. Press on *Import a Workspace* icon and choose `./workspace.json`
-* Navigate back to the list of workspaces and and click on *Details* icon and choose *View Details*. Copy the Workspace ID into `WORKSPACE_ID` variable in `./.env` file.
+* Open the *Service Credentials* tab and click on *View Credentials*. Copy the contents and fill `BOT_API_URL`, `API_USERNAME`, `API_PASSWORD` variabiles in `./chat-bot-api/.env` file.
+* Back in the browser, open the *Manage* tab and click *Launch tool*. Press on *Import a Workspace* icon and choose `./chat-bot-api/workspace.json`
+* Navigate back to the list of workspaces and and click on *Details* icon and choose *View Details*. Copy the Workspace ID into `WORKSPACE_ID` variable in `./chat-bot-api/.env` file.
 * Run the development server with `npm run dev`
-* Pause for the discussion on configuration. Observe the contents of `./src/config.js`.
-* Pause for the discussion on build artifacts. Create a build artifact for deployment with `npm run build`. Observe the contents of `./dist` directory
-* Create a `./manifest.yml` file:
+* Pause for the discussion on configuration. Observe the contents of `./chat-bot-api/src/config.js`.
+* Pause for the discussion on build artifacts. Create a build artifact for deployment with `npm run build`. Observe the contents of `./chat-bot-api/dist` directory
+* Create a `./chat-bot-api/manifest.yml` file:
 ```
 applications:
 - name: chat-bot-api
@@ -282,7 +281,7 @@ applications:
 ```
 * Finally, deploy the application using the command line: `cf push`. Observe the command line output for a URL of the deployed app
 * Pause for the discussion on logs. Print the logs of the application with `cf logs --recent chat-bot-api`
-* Open a `chat-bot-ui` in your code editor and modify `./config/prod.env.js` with the URL of the deployed API
+* Open a `chat-bot-ui` in your code editor and modify `./chat-bot-ui/config/prod.env.js` with the URL of the deployed API
 * Rebuild and redeploy the `chat-bot-ui` with `npm run build` and `cf push`
 * Open the URL of deployed `chat-bot-ui` and try to have a conversation with your bot
 
