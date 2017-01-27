@@ -9,7 +9,7 @@ This exercise covers the following Bluemix topics: buildpacks, routes, configura
 * Bluemix account
 
 ## First steps
-* Clone the repo `git clone https://github.com/marvelousNinja/chat-bot.git`
+* Clone the repo `git clone https://github.com/Altoros/chat-bot.git`
 * Repository contains completed application at `master` branch and the starting point at `starting-point` branch. Checkout the starting point with `git checkout starting-point`
 
 ## Building the UI
