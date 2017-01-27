@@ -1,4 +1,4 @@
-# Chat Bot Application
+# Chat Bot Application (Starting Point)
 
 Application provides a simple UI to chat with a Food Critic - a bot created with Watson Conversation service.
 This exercise covers the following Bluemix topics: buildpacks, routes, configuration and logs.
